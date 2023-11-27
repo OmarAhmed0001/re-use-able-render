@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const coupon_controller_1 = require("../controllers/coupon.controller");
+const protected_middleware_1 = require("../middlewares/protected.middleware");
+const allowedTo_middleware_1 = require("../middlewares/allowedTo.middleware");
+const user_interface_1 = require("../interfaces/user/user.interface");
+const coupon_validator_1 = require("../validations/coupon.validator");
+const validation_middleware_1 = require("../middlewares/validation.middleware");
+const couponRouter = (0, express_1.Router)();
+couponRouter.route("/").get(protected_middleware_1.protectedMiddleware, (0, allowedTo_middleware_1.allowedTo)(user_interface_1.Role.RootAdmin, user_interface_1.Role.AdminA, user_interface_1.Role.AdminB, user_interface_1.Role.AdminC, user_interface_1.Role.SubAdmin), coupon_controller_1.getAllCoupons);
+couponRouter.route("/getCouponByNameAndProducts/:code").get(protected_middleware_1.protectedMiddleware, coupon_controller_1.getCouponByNameAndProducts);
+couponRouter.route("/:id").get(protected_middleware_1.protectedMiddleware, (0, allowedTo_middleware_1.allowedTo)(user_interface_1.Role.RootAdmin, user_interface_1.Role.AdminA, user_interface_1.Role.AdminB, user_interface_1.Role.AdminC, user_interface_1.Role.SubAdmin), coupon_controller_1.getOneCouponById);
+couponRouter.route("/").post(protected_middleware_1.protectedMiddleware, (0, allowedTo_middleware_1.allowedTo)(user_interface_1.Role.RootAdmin, user_interface_1.Role.AdminA, user_interface_1.Role.AdminB), (0, validation_middleware_1.validate)(coupon_validator_1.CouponCreateValidator), coupon_controller_1.createCoupon);
+couponRouter.route("/:id").put(protected_middleware_1.protectedMiddleware, (0, allowedTo_middleware_1.allowedTo)(user_interface_1.Role.RootAdmin, user_interface_1.Role.AdminA, user_interface_1.Role.AdminB), (0, validation_middleware_1.validate)(coupon_validator_1.CouponUpdateValidator), coupon_controller_1.updateCoupon);
+couponRouter.route("/:id").delete(protected_middleware_1.protectedMiddleware, (0, allowedTo_middleware_1.allowedTo)(user_interface_1.Role.RootAdmin, user_interface_1.Role.AdminA, user_interface_1.Role.AdminB), coupon_controller_1.deleteCoupon);
+exports.default = couponRouter;

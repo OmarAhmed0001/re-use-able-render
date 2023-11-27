@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const protected_middleware_1 = require("../middlewares/protected.middleware");
+const webhook_controller_1 = require("../controllers/webhook.controller");
+const allowedTo_middleware_1 = require("../middlewares/allowedTo.middleware");
+const user_interface_1 = require("../interfaces/user/user.interface");
+const webhookRouter = (0, express_1.Router)();
+webhookRouter.route("/moyasar").post(protected_middleware_1.protectedMiddleware, (0, allowedTo_middleware_1.allowedTo)(user_interface_1.Role.USER), webhook_controller_1.moyasarPaid);
+exports.default = webhookRouter;
